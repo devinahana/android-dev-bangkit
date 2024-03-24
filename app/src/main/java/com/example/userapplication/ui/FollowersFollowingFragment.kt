@@ -1,0 +1,80 @@
+package com.example.userapplication.ui
+
+import androidx.lifecycle.ViewModelProvider
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.userapplication.data.response.UserResponse
+import com.example.userapplication.databinding.FragmentFollowersFollowingBinding
+
+class FollowersFollowingFragment : Fragment() {
+
+    companion object {
+        const val ARG_SECTION_NUMBER = "section_number"
+        const val USERNAME = "username"
+    }
+
+    private lateinit var binding: FragmentFollowersFollowingBinding
+    private lateinit var viewModel: FollowersFollowingViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentFollowersFollowingBinding.inflate(layoutInflater)
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val username = arguments?.getString(USERNAME)
+        val factory = username?.let { FollowersFollowingViewModelFactory(it) }
+        viewModel = ViewModelProvider(this, factory!!).get(FollowersFollowingViewModel::class.java)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val index = arguments?.getInt(ARG_SECTION_NUMBER, 0)
+
+        if (index == 1) {
+            viewModel.listFollowers.observe(viewLifecycleOwner) {users ->
+                setListUserData(users)
+            }
+            viewModel.isLoadingFollowers.observe(viewLifecycleOwner) {
+                showLoading(it)
+            }
+        } else if (index == 2) {
+            viewModel.listFollowing.observe(viewLifecycleOwner) {users ->
+                setListUserData(users)
+            }
+            viewModel.isLoadingFollowing.observe(viewLifecycleOwner) {
+                showLoading(it)
+            }
+        }
+    }
+
+    private fun setListUserData(users: List<UserResponse>) {
+        val adapter = ListUserAdapter()
+        adapter.submitList(users)
+        binding.recyclerView.adapter = adapter
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
+    }
+
+}
+
+class FollowersFollowingViewModelFactory(private val username: String) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(FollowersFollowingViewModel::class.java)) {
+            return FollowersFollowingViewModel(username) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
