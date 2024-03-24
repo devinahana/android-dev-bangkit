@@ -5,6 +5,5 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/material_dynamic_primary10</item>
         <item name="colorSecondary">@color/material_dynamic_primary50</item>
-        <item name="colorOnSecondary">@color/white</item>
     </style>
 </resources>
