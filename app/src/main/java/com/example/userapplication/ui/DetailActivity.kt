@@ -22,7 +22,6 @@ class DetailActivity : AppCompatActivity() {
     // ViewModel initialization with KTX
     private val detailViewModel by viewModels<DetailViewModel>()
 
-
     companion object {
         const val KEY_USERNAME = "key_username"
         @StringRes
