@@ -6,4 +6,6 @@
     <string name="detail_activity_title">User\'s Detail</string>
     <string name="tab_text_1">Followers</string>
     <string name="tab_text_2">Following</string>
+    <string name="light_mode">Light Mode</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>

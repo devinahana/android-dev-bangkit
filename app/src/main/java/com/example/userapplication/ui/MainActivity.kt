@@ -2,16 +2,25 @@ package com.example.userapplication.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mydatastore.SettingPreferences
+import com.example.mydatastore.dataStore
 import com.example.userapplication.R
 import com.example.userapplication.data.response.UserResponse
 import com.example.userapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var pref: SettingPreferences
+    private lateinit var modeViewModel: ModeViewModel
 
     // ViewModel initialization with KTX
     private val mainViewModel by viewModels<MainViewModel>()
@@ -29,6 +38,10 @@ class MainActivity : AppCompatActivity() {
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.recyclerView.addItemDecoration(itemDecoration)
 
+        pref = SettingPreferences.getInstance(application.dataStore)
+        modeViewModel = ViewModelProvider(this, ModeViewModelFactory(pref)).get(
+            ModeViewModel::class.java
+        )
 
         mainViewModel.listUser.observe(this) { users ->
             setListUserData(users)
@@ -57,6 +70,28 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_form, menu)
+        modeViewModel.getThemeSettings().observe(this) { isDarkMode ->
+            updateThemeMenuItem(isDarkMode) // Update menu item based on theme
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.change_mode -> {
+                if (item.title == "Dark Mode") {
+                    modeViewModel.saveThemeSetting(false);
+                } else {
+                    modeViewModel.saveThemeSetting(true);
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun setListUserData(user: List<UserResponse>) {
         val adapter = ListUserAdapter()
         adapter.submitList(user)
@@ -76,6 +111,20 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity"
     }
+
+    private fun updateThemeMenuItem(isDarkMode: Boolean) {
+        val menuItem = binding.toolbar.menu.findItem(R.id.change_mode)
+        if (isDarkMode) { // Dark mode
+            menuItem.title = getString(R.string.dark_mode)
+            menuItem.setIcon(R.drawable.moon_filled)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else { // Light mode
+            menuItem.title = getString(R.string.light_mode)
+            menuItem.setIcon(R.drawable.moon_border)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
 
 
 }
