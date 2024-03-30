@@ -23,10 +23,6 @@ class FollowersFollowingViewModel(private val username: String) : ViewModel() {
     private val _isLoadingFollowing = MutableLiveData<Boolean>()
     val isLoadingFollowing: LiveData<Boolean> = _isLoadingFollowing
 
-    companion object{
-        private const val TAG = "FragmentViewModel"
-    }
-
     init {
         getListFollowers(username)
         getListFollowing(username)
@@ -74,6 +70,10 @@ class FollowersFollowingViewModel(private val username: String) : ViewModel() {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
+    }
+
+    companion object{
+        private const val TAG = "FragmentViewModel"
     }
 
 

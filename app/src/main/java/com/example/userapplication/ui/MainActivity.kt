@@ -16,10 +16,6 @@ class MainActivity : AppCompatActivity() {
     // ViewModel initialization with KTX
     private val mainViewModel by viewModels<MainViewModel>()
 
-    companion object {
-        private const val TAG = "MainActivity"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -75,6 +71,10 @@ class MainActivity : AppCompatActivity() {
             binding.progressBar.visibility = View.GONE
             binding.searchBar.visibility = View.VISIBLE
         }
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 
 

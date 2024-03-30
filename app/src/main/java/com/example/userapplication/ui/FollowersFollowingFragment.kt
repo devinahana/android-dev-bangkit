@@ -6,21 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapplication.data.response.UserResponse
 import com.example.userapplication.databinding.FragmentFollowersFollowingBinding
 
 class FollowersFollowingFragment : Fragment() {
 
-    companion object {
-        const val ARG_SECTION_NUMBER = "section_number"
-        const val USERNAME = "username"
-    }
-
     private lateinit var binding: FragmentFollowersFollowingBinding
-    private lateinit var viewModel: FollowersFollowingViewModel
 
+    private lateinit var viewModel: FollowersFollowingViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,7 +22,7 @@ class FollowersFollowingFragment : Fragment() {
         binding = FragmentFollowersFollowingBinding.inflate(layoutInflater)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val username = arguments?.getString(USERNAME)
-        val factory = username?.let { FollowersFollowingViewModelFactory(it) }
+        val factory = username?.let { ViewModelFactory(it) }
         viewModel = ViewModelProvider(this, factory!!).get(FollowersFollowingViewModel::class.java)
         return binding.root
     }
@@ -68,13 +62,9 @@ class FollowersFollowingFragment : Fragment() {
         }
     }
 
-}
-
-class FollowersFollowingViewModelFactory(private val username: String) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(FollowersFollowingViewModel::class.java)) {
-            return FollowersFollowingViewModel(username) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
+    companion object {
+        const val ARG_SECTION_NUMBER = "section_number"
+        const val USERNAME = "username"
     }
+
 }

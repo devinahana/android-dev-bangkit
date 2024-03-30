@@ -2,9 +2,9 @@ package com.example.userapplication.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -19,17 +19,7 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
 
-    // ViewModel initialization with KTX
-    private val detailViewModel by viewModels<DetailViewModel>()
-
-    companion object {
-        const val KEY_USERNAME = "key_username"
-        @StringRes
-        private val TAB_TITLES = intArrayOf(
-            R.string.tab_text_1,
-            R.string.tab_text_2
-        )
-    }
+    private lateinit var detailViewModel : DetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +30,8 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar);
 
         val username = intent.getStringExtra(KEY_USERNAME)
-        detailViewModel.getDetailUser(username ?: "")
+        val factory = username?.let { ViewModelFactory(it) }
+        detailViewModel = ViewModelProvider(this, factory!!).get(DetailViewModel::class.java)
 
         detailViewModel.user.observe(this) { user ->
             setUserData(user)
@@ -77,5 +68,14 @@ class DetailActivity : AppCompatActivity() {
         } else {
             binding.progressBar.visibility = View.GONE
         }
+    }
+
+    companion object {
+        const val KEY_USERNAME = "key_username"
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.tab_text_1,
+            R.string.tab_text_2
+        )
     }
 }

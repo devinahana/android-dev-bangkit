@@ -19,10 +19,6 @@ class MainViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    companion object{
-        private const val TAG = "MainViewModel"
-    }
-
     init {
         getListUser()
     }
@@ -69,5 +65,9 @@ class MainViewModel : ViewModel() {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
+    }
+
+    companion object{
+        private const val TAG = "MainViewModel"
     }
 }

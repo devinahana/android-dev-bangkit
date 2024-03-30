@@ -10,15 +10,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailViewModel : ViewModel() {
+class DetailViewModel(private val username: String) : ViewModel() {
     private val _user = MutableLiveData<UserResponse>()
     val user: LiveData<UserResponse> = _user
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    companion object{
-        private const val TAG = "DetailViewModel"
+    init {
+        getDetailUser(username)
     }
 
     fun getDetailUser(username: String) {
@@ -42,4 +42,7 @@ class DetailViewModel : ViewModel() {
         })
     }
 
+    companion object{
+        private const val TAG = "DetailViewModel"
+    }
 }
