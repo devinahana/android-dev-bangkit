@@ -111,7 +111,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         app:fabSize="normal"
-        app:backgroundTint="?attr/colorSecondary"
+        app:backgroundTint="?attr/colorSecondaryContainer"
         app:tint="@android:color/white"
         android:contentDescription="@string/fab_fav" />
 

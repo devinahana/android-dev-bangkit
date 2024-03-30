@@ -5,6 +5,7 @@
          <item name="colorPrimary">@color/myPrimary</item>
         <item name="colorSecondary">@color/mySecondary</item>
         <item name="tabIndicatorColor">@color/black</item>
+        <item name="colorSecondaryContainer">@color/mySecondary</item>
     </style>
 
     <style name="Theme.UserApplication" parent="Base.Theme.UserApplication" />
