@@ -22,7 +22,7 @@ class FollowersFollowingFragment : Fragment() {
         binding = FragmentFollowersFollowingBinding.inflate(layoutInflater)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val username = arguments?.getString(USERNAME)
-        val factory = username?.let { ViewModelFactory(it) }
+        val factory = username?.let { ViewModelFactory(username = it) }
         viewModel = ViewModelProvider(this, factory!!).get(FollowersFollowingViewModel::class.java)
         return binding.root
     }
@@ -49,7 +49,7 @@ class FollowersFollowingFragment : Fragment() {
     }
 
     private fun setListUserData(users: List<UserResponse>) {
-        val adapter = ListUserAdapter()
+        val adapter = ListUserAdapter<UserResponse>()
         adapter.submitList(users)
         binding.recyclerView.adapter = adapter
     }

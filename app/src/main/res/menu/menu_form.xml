@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/fav_user"
+        android:icon="@drawable/heart_filled"
+        android:title="@string/fav"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/change_mode"
         android:icon="@drawable/moon_border"
         android:title="@string/light_mode"
         app:showAsAction="always" />
+
 </menu>

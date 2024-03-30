@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         android:background="?attr/colorSecondary"
         android:title="@string/main_activity_title"
         app:titleTextColor="@android:color/white" />
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         android:paddingBottom="20dp"
         android:background="?attr/colorSecondary">
 
@@ -94,12 +94,25 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/topSection"
         android:background="?attr/colorSecondary"
-        app:tabTextColor="@android:color/white"/>
+        app:tabTextColor="@android:color/white"
+        app:tabIndicatorColor="?attr/tabIndicatorColor"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tabs" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        app:fabSize="normal"
+        app:backgroundTint="?attr/colorSecondary"
+        app:tint="@android:color/white"
+        android:contentDescription="@string/fab_fav" />
 
 </RelativeLayout>

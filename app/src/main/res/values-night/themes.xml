@@ -4,6 +4,7 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/myPrimary</item>
-        <item name="colorSecondary">@color/mySecondary</item>
+        <item name="colorSecondary">@color/mySecondaryDark</item>
+        <item name="tabIndicatorColor">@color/white</item>
     </style>
 </resources>

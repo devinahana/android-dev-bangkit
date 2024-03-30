@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         android:background="?attr/colorSecondary"
         android:title="@string/main_activity_title"
         app:titleTextColor="@android:color/white" />
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="86dp"
         android:hint="@string/searchPlaceHolder"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"

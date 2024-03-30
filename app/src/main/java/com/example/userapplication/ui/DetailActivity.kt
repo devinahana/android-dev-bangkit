@@ -1,5 +1,6 @@
 package com.example.userapplication.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.mydatastore.SettingPreferences
 import com.example.mydatastore.dataStore
 import com.example.userapplication.R
+import com.example.userapplication.data.database.User
 import com.example.userapplication.data.response.UserResponse
 import com.example.userapplication.databinding.ActivityDetailBinding
 import com.google.android.material.tabs.TabLayout
@@ -29,6 +31,8 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var detailViewModel : DetailViewModel
 
+    private lateinit var userViewModel: UserViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -38,12 +42,17 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         pref = SettingPreferences.getInstance(application.dataStore)
-        modeViewModel = ViewModelProvider(this, ModeViewModelFactory(pref)).get(
+        modeViewModel = ViewModelProvider(this, ViewModelFactory(pref = pref)).get(
             ModeViewModel::class.java
         )
 
+        val userFactory = UserViewModelFactory.getInstance(this@DetailActivity.application)
+        userViewModel = ViewModelProvider(this, userFactory).get(
+            UserViewModel::class.java
+        )
+
         val username = intent.getStringExtra(KEY_USERNAME)
-        val factory = username?.let { ViewModelFactory(it) }
+        val factory = username?.let { ViewModelFactory(username = it) }
         detailViewModel = ViewModelProvider(this, factory!!).get(DetailViewModel::class.java)
 
         detailViewModel.user.observe(this) { user ->
@@ -62,6 +71,19 @@ class DetailActivity : AppCompatActivity() {
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
+
+        binding.fabFavorite.setOnClickListener {
+            // Add to favorite
+            if (binding.fabFavorite.contentDescription.toString() == getString(R.string.fab_fav)) {
+                userViewModel.setFavorite(username, true)
+                changeFavorite(true)
+            }
+            // Remove from favorite
+            else {
+                userViewModel.setFavorite(username, false)
+                changeFavorite(false)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -82,6 +104,10 @@ class DetailActivity : AppCompatActivity() {
                     modeViewModel.saveThemeSetting(true);
                 }
             }
+            R.id.fav_user -> {
+                val moveIntent = Intent(this@DetailActivity, FavoriteActivity::class.java)
+                startActivity(moveIntent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -96,6 +122,19 @@ class DetailActivity : AppCompatActivity() {
             .load(user.avatarUrl)
             .apply(RequestOptions.bitmapTransform(CircleCrop()))
             .into(binding.imgProfileDetail)
+
+        // Observe the LiveData user object
+        userViewModel.getUser(user.login).observe(this) { userDb ->
+            if (userDb != null) {
+                // User exists in the database
+                val isFavoriteDb = userDb.isFavorite
+                changeFavorite(isFavoriteDb)
+            } else {
+                // User doesn't exist in the database, insert it
+                userViewModel.insert(User(user.login, user.avatarUrl))
+            }
+        }
+
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -107,15 +146,35 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun updateThemeMenuItem(isDarkMode: Boolean) {
-        val menuItem = binding.toolbar.menu.findItem(R.id.change_mode)
+        val menuItemMode = binding.toolbar.menu.findItem(R.id.change_mode)
+        val menuItemFav = binding.toolbar.menu.findItem(R.id.fav_user)
+        val tabLayout = binding.tabs
         if (isDarkMode) { // Dark mode
-            menuItem.title = getString(R.string.dark_mode)
-            menuItem.setIcon(R.drawable.moon_filled)
+            menuItemFav.setIcon(R.drawable.heart_filled)
+            menuItemMode.title = getString(R.string.dark_mode)
+            menuItemMode.setIcon(R.drawable.moon_filled)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else { // Light mode
-            menuItem.title = getString(R.string.light_mode)
-            menuItem.setIcon(R.drawable.moon_border)
+            menuItemFav.setIcon(R.drawable.heart_border)
+            menuItemMode.title = getString(R.string.light_mode)
+            menuItemMode.setIcon(R.drawable.moon_border)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
+    private fun changeFavorite(isFavorite: Boolean) {
+
+        val username = binding.tvUsernameDetail.text.toString()
+
+        // Add to favorite
+        if (isFavorite) {
+            binding.fabFavorite.contentDescription = getString(R.string.fab_unfav)
+            binding.fabFavorite.setImageResource(R.drawable.heart_filled)
+        }
+        // Remove from favorite
+        else {
+            binding.fabFavorite.contentDescription = getString(R.string.fab_fav)
+            binding.fabFavorite.setImageResource(R.drawable.heart_border)
         }
     }
 
