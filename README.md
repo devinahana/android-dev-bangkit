@@ -30,5 +30,5 @@ This is a **Simple User Application** developed as part of my final project for 
     - You'll need to obtain a GitHub API token and configure it in the application for the app to function correctly.
 
 4. **Run the app** on an emulator or physical device.
-
+***
 © Devina Hana - Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka
