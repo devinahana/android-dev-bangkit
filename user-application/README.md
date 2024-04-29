@@ -26,10 +26,7 @@ This is a **Simple User Application** developed as part of my final project for 
     ```
 2. **Open user-application folder** in Android Studio.
 
-3. **Configure the app**:
-    - You'll need to obtain a GitHub API token and configure it in the build.gradle (Module :app) for the app to function properly
-
-4. **Run the app** on an emulator or physical device.
+3. **Run the app** on an emulator or physical device.
 
 ***
 
