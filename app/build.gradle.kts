@@ -33,7 +33,7 @@ android {
 
         debug {
             buildConfigField("String", "API_URL", "\"https://api.github.com/\"")
-            buildConfigField("String", "TOKEN", "\"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\"")
+            buildConfigField("String", "TOKEN", "\"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\"")
 
         }
 
@@ -55,7 +55,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -66,9 +66,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("androidx.room:room-runtime:2.6.1")
