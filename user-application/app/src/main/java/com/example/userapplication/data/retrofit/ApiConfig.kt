@@ -19,7 +19,7 @@ class ApiConfig {
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor { chain ->
                     val request = chain.request().newBuilder()
-                        .addHeader("Authorization", "token ${BuildConfig.TOKEN}")
+//                        .addHeader("Authorization", "token ${BuildConfig.TOKEN}")
                         .build()
                     chain.proceed(request)
                 }
