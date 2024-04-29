@@ -21,7 +21,7 @@ This is a **Cancer Detection Application** developed as part of my final project
     ```bash
     git clone https://github.com/devinahana/android-dev-bangkit.git
     ```
-2. **Open cancer-detection folder** in Android Studio.
+2. **Open *cancer-detection* folder** in Android Studio.
 
 3. **Configure the app**:
     - You'll need to obtain a News API token and configure it in the build.gradle (Module :app) for the app to function properly.

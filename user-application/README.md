@@ -24,7 +24,7 @@ This is a **Simple User Application** developed as part of my final project for 
     ```bash
     git clone https://github.com/devinahana/android-dev-bangkit.git
     ```
-2. **Open user-application folder** in Android Studio.
+2. **Open *user-application* folder** in Android Studio.
 
 3. **Run the app** on an emulator or physical device.
 
