@@ -22,7 +22,7 @@ This is a **Simple User Application** developed as part of my final project for 
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/devinahana/simple-user-app.git
+    git clone https://github.com/devinahana/android-dev-bangkit.git
     ```
 2. **Open user-application folder** in Android Studio.
 

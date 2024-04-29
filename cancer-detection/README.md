@@ -19,7 +19,7 @@ This is a **Cancer Detection Application** developed as part of my final project
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/devinahana/simple-user-app.git
+    git clone https://github.com/devinahana/android-dev-bangkit.git
     ```
 2. **Open cancer-detection folder** in Android Studio.
 
