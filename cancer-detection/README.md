@@ -30,4 +30,4 @@ This is a **Cancer Detection Application** developed as part of my final project
 
 ***
 
-© Devina Hana - Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka
+© Devina Hana - Bangkit Academy

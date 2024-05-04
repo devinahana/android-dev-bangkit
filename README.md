@@ -7,4 +7,4 @@ This is a repository that showcases all the mobile development projects I've com
 
 ***
 
-© Devina Hana - Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka
+© Devina Hana - Bangkit Academy

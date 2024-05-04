@@ -30,4 +30,4 @@ This is a **Simple User Application** developed as part of my final project for 
 
 ***
 
-© Devina Hana - Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka
+© Devina Hana - Bangkit Academy
