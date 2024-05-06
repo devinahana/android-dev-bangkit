@@ -14,9 +14,9 @@ This is a **Simple User Application** developed as part of my final project for 
 - **Kotlin**: The app is built using the Kotlin programming language.
 - **ViewModel**: Implements the ViewModel architecture component to handle data for the app and survive configuration changes.
 - **SQLite & Room**: Uses SQLite and Room to manage and store the app's local database.
+- **DataStore**: Used to store small data like app preference settings, mode, or theme
 - **Retrofit**: A powerful HTTP client library that simplifies the process of making API requests.
 - **Gson**: A JSON library that helps with parsing and formatting JSON data for API configuration.
-- **DataStore**: Used to store preference settings such as dark mode or light mode.
 
 ## Getting Started
 
