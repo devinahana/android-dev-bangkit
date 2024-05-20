@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">UserStory</string>
+    <string name="signup">Register</string>
+    <string name="login">Login</string>
+    <string name="message_welcome_page">Let\'s connect with each other by sharing your precious stories!</string>
+    <string name="title_welcome_page">Welcome to UserStory</string>
+    <string name="title_signup_page">Register yourself to UserStory</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="message_login_page">Login first!</string>
+    <string name="title_login_page">Excited to share your story?</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="createdAt">createdAt</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="submit">Submit</string>
+    <string name="logout">Logout</string>
+    <string name="error_message">An error occured</string>
+    <string name="title_main_page">Browse everyone\'s stories here</string>
+    <string name="create_story">Create your own story</string>
+    <string name="no_data">The data is still empty</string>
+    <string name="hint_description">Insert description here</string>
+</resources>
