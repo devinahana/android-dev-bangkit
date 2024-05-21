@@ -9,6 +9,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import com.bangkit.userstory.BuildConfig
@@ -17,8 +19,11 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 private const val MAXIMAL_SIZE = 1000000 //1 MB
 private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
@@ -103,4 +108,29 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
     return Bitmap.createBitmap(
         source, 0, 0, source.width, source.height, matrix, true
     )
+}
+
+fun formatDateTime(dateTime: String): String {
+    val deviceLocale = Locale.getDefault().language
+    val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+    isoFormat.timeZone = TimeZone.getTimeZone("UTC")
+    val date: Date = isoFormat.parse(dateTime)
+
+    val formattedDate: String = when (deviceLocale) {
+        "in" -> {
+            val indonesianFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale("id", "ID"))
+            indonesianFormat.format(date)
+        }
+        "en" -> {
+            val englishFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.US)
+            englishFormat.format(date)
+        }
+        else -> {
+            val defaultFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+            defaultFormat.timeZone = TimeZone.getTimeZone("UTC")
+            defaultFormat.format(date)
+        }
+    }
+
+    return formattedDate
 }

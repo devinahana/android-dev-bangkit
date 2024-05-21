@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -12,9 +13,12 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bangkit.userstory.R
 import com.bangkit.userstory.ViewModelFactory
 import com.bangkit.userstory.databinding.ActivityDetailBinding
+import com.bangkit.userstory.di.formatDateTime
 import com.bangkit.userstory.view.main.MainViewModel
 import com.bangkit.userstory.view.authentication.welcome.WelcomeActivity
 import com.bumptech.glide.Glide
@@ -44,19 +48,24 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel.detailStory.observe(this) {response ->
             if (response.story != null && response.error == false) {
-                binding.errorTextView.visibility = View.GONE
+                binding.errorTextView.isVisible = false
 
                 binding.tvStoryOwner.text = response.story.name
                 binding.tvStoryDescription.text = response.story.description
-                binding.tvStoryCreatedAt.text = "created at : ${response.story.createdAt}"
+                val formattedCreatedAt = getString(R.string.createdAt) + " " + response.story.createdAt?.let {
+                    formatDateTime(
+                        it
+                    )
+                }
+                binding.tvStoryCreatedAt.text = formattedCreatedAt
                 Glide.with(binding.root)
                     .load(response.story.photoUrl)
                     .into(binding.imgStoryPhoto)
-                binding.contentScrollView.visibility = View.VISIBLE
+                binding.contentScrollView.isVisible = true
             } else {
                 binding.errorTextView.text = response.message
-                binding.errorTextView.visibility = View.VISIBLE
-                binding.contentScrollView.visibility = View.GONE
+                binding.errorTextView.isVisible = true
+                binding.contentScrollView.isVisible = false
             }
         }
 
@@ -75,22 +84,29 @@ class DetailActivity : AppCompatActivity() {
             R.id.logout -> {
                 showLogoutConfirmationDialog()
             }
+            R.id.change_language -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun showLogoutConfirmationDialog() {
         val alertDialog = AlertDialog.Builder(this).apply {
-            setTitle("Logout")
-            setMessage("Are you sure you want to log out?")
-            setPositiveButton("Yes") { _, _ ->
+            setTitle(getString(R.string.logout))
+            setMessage(getString(R.string.logout_confirmation))
+            setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.logout()
             }
-            setNegativeButton("No", null)
+            setNegativeButton(getString(R.string.no), null)
         }.create()
 
         alertDialog.setOnShowListener {
             alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
+            val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
+            val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
             val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
             val layoutParams = alertDialog.window?.attributes
             layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
@@ -101,11 +117,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
+        binding.progressBar.isVisible = isLoading
     }
 
     private fun setupView() {

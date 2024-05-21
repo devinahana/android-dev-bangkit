@@ -12,6 +12,8 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bangkit.userstory.R
 import com.bangkit.userstory.ViewModelFactory
 import com.bangkit.userstory.data.request.LoginRequest
@@ -56,23 +58,27 @@ class LoginActivity : AppCompatActivity() {
         response?.let {
             val alertDialog = AlertDialog.Builder(this).apply {
                 if (it.error == false) {
-                    setTitle("Success")
-                    setMessage("You are succesfully logged in!")
-                    setPositiveButton("Continue") { _, _ ->
+                    setTitle(getString(R.string.success))
+                    setMessage(getString(R.string.login_success))
+                    setPositiveButton(getString(R.string.continue_)) { _, _ ->
                         val intent = Intent(context, MainActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         finish()
                     }
                 } else if (it.error == true) {
-                    setTitle("Failed")
+                    setTitle(getString(R.string.failed))
                     setMessage(it.message)
-                    setPositiveButton("OK", null)
+                    setPositiveButton(getString(R.string.ok), null)
                 }
             }.create()
 
             alertDialog.setOnShowListener {
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
+                val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
+                val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
                 val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
                 val layoutParams = alertDialog.window?.attributes
                 layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
@@ -134,11 +140,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
+        binding.progressBar.isVisible = isLoading
     }
 
 }

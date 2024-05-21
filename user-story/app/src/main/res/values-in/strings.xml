@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">UserStory</string>
+    <string name="signup">Daftar</string>
+    <string name="login">Masuk</string>
+    <string name="name">Nama</string>
+    <string name="description">Deskripsi</string>
+    <string name="createdAt">Dibentuk pada</string>
+    <string name="gallery">Galeri</string>
+    <string name="camera">Kamera</string>
+    <string name="submit">Tambah</string>
+    <string name="logout">Keluar</string>
+    <string name="email">Email</string>
+    <string name="password">Kata sandi</string>
+    <string name="success">Berhasil</string>
+    <string name="failed">Gagal</string>
+    <string name="create_story_sucess">Anda berhasil membentuk cerita baru</string>
+    <string name="register_success">Akun Anda berhasil dibentuk. Silahkan masuk untuk melanjutkan</string>
+    <string name="login_success">Anda telah berhasil masuk!</string>
+    <string name="continue_">Lanjut</string>
+    <string name="ok">OK</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="change_language">Ganti bahasa</string>
+    <string name="create_story">Buatlah ceritamu sendiri</string>
+    <string name="title_welcome_page">Selamat datang di UserStory</string>
+    <string name="message_welcome_page">Mari terhubung dengan satu sama lain dengan saling berbagi momen berharga!</string>
+    <string name="title_signup_page">Daftarkan dirimu di UserStory</string>
+    <string name="title_login_page">Sudah tidak sabar membagikan ceritamu?</string>
+    <string name="message_login_page">Masuk terlebih dahulu!</string>
+    <string name="title_main_page">Telusuri cerita orang-orang di sini</string>
+    <string name="logout_confirmation">Apakah Anda yakin ingin keluar?</string>
+    <string name="no_data">Data ini masih kosong</string>
+    <string name="error_message">Telah terjadi kesalahan</string>
+    <string name="error_email">Alamat email tidak valid</string>
+    <string name="error_password_less_8">Kata sandi minimal 8 karakter</string>
+</resources>

@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.bangkit.userstory.R
 import com.google.android.material.textfield.TextInputLayout
 
 class CustomPasswordInputLayout @JvmOverloads constructor(
@@ -25,7 +26,7 @@ class CustomPasswordInputLayout @JvmOverloads constructor(
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     if (s.isNotEmpty()) {
                         if (s.length < 8) {
-                            setError("Password must be at least 8 characters")
+                            setError(context.getString(R.string.error_password_less_8))
                         } else {
                             setError(null)
                         }

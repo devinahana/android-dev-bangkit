@@ -4,7 +4,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.userstory.R
 import com.bangkit.userstory.ViewModelFactory
@@ -54,17 +55,17 @@ class MainActivity : AppCompatActivity() {
                 if (response.listStory.isEmpty()) {
                     binding.errorTextView.text = R.string.no_data.toString()
                     binding.errorTextView.setTextColor(ContextCompat.getColor(this, R.color.black))
-                    binding.errorTextView.visibility = View.VISIBLE
-                    binding.recyclerView.visibility = View.GONE
+                    binding.errorTextView.isVisible = true
+                    binding.recyclerView.isVisible = false
                 } else {
-                    binding.errorTextView.visibility = View.GONE
-                    binding.recyclerView.visibility = View.VISIBLE
+                    binding.errorTextView.isVisible = false
+                    binding.recyclerView.isVisible = true
                     setListStoryData(response.listStory)
                 }
             } else {
                 binding.errorTextView.text = response.message
-                binding.errorTextView.visibility = View.VISIBLE
-                binding.recyclerView.visibility = View.GONE
+                binding.errorTextView.isVisible = true
+                binding.recyclerView.isVisible = false
             }
         }
 
@@ -88,22 +89,29 @@ class MainActivity : AppCompatActivity() {
             R.id.logout -> {
                 showLogoutConfirmationDialog()
             }
+            R.id.change_language -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun showLogoutConfirmationDialog() {
         val alertDialog = AlertDialog.Builder(this).apply {
-            setTitle("Logout")
-            setMessage("Are you sure you want to log out?")
-            setPositiveButton("Yes") { _, _ ->
+            setTitle(getString(R.string.logout))
+            setMessage(getString(R.string.logout_confirmation))
+            setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.logout()
             }
-            setNegativeButton("No", null)
+            setNegativeButton(getString(R.string.no), null)
         }.create()
 
         alertDialog.setOnShowListener {
             alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
+            val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
+            val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
             val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
             val layoutParams = alertDialog.window?.attributes
             layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
@@ -134,10 +142,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
+        binding.progressBar.isVisible = isLoading
     }
 }

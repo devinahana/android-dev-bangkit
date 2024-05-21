@@ -7,6 +7,7 @@ import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -18,6 +19,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bangkit.userstory.R
 import com.bangkit.userstory.ViewModelFactory
 import com.bangkit.userstory.data.response.GeneralResponse
@@ -54,33 +57,36 @@ class CreateActivity : AppCompatActivity() {
             }
         }
 
-        binding.galleryButton.setOnClickListener { startGallery() }
-        binding.cameraButton.setOnClickListener { startCamera() }
-        binding.submitButton.setOnClickListener {
-            val uri = currentImageUri
-            if (uri != null) {
-                val imageFile = uriToFile(uri, this).reduceFileImage()
-                val description = binding.descEditText.text.toString()
-                viewModel.createStory(token, imageFile, description)
-            } else {
-                handleResponse(
-                    GeneralResponse(
-                        error = true,
-                        message = "You must pick a photo first before submit"
+        binding.apply {
+            galleryButton.setOnClickListener { startGallery() }
+            cameraButton.setOnClickListener { startCamera() }
+            submitButton.setOnClickListener {
+                val uri = currentImageUri
+                if (uri != null) {
+                    val imageFile = uriToFile(uri, this@CreateActivity).reduceFileImage()
+                    val description = binding.descEditText.text.toString()
+                    viewModel.createStory(token, imageFile, description)
+                } else {
+                    handleResponse(
+                        GeneralResponse(
+                            error = true,
+                            message = "You must pick a photo first before submit"
+                        )
                     )
-                )
-            }
+                }
 
-            viewModel.newStory.observe(this) { response ->
-                if (response.error != null) {
-                    handleResponse(response)
+                viewModel.newStory.observe(this@CreateActivity) { response ->
+                    if (response.error != null) {
+                        handleResponse(response)
+                    }
+                }
+
+                viewModel.isLoading.observe(this@CreateActivity) { isLoading ->
+                    showLoading(isLoading)
                 }
             }
-
-            viewModel.isLoading.observe(this) { isLoading ->
-                showLoading(isLoading)
-            }
         }
+
 
     }
 
@@ -94,22 +100,29 @@ class CreateActivity : AppCompatActivity() {
             R.id.logout -> {
                 showLogoutConfirmationDialog()
             }
+            R.id.change_language -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun showLogoutConfirmationDialog() {
         val alertDialog = AlertDialog.Builder(this).apply {
-            setTitle("Logout")
-            setMessage("Are you sure you want to log out?")
-            setPositiveButton("Yes") { _, _ ->
+            setTitle(getString(R.string.logout))
+            setMessage(getString(R.string.logout_confirmation))
+            setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.logout()
             }
-            setNegativeButton("No", null)
+            setNegativeButton(getString(R.string.no), null)
         }.create()
 
         alertDialog.setOnShowListener {
             alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
+            val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
+            val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
             val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
             val layoutParams = alertDialog.window?.attributes
             layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
@@ -169,20 +182,24 @@ class CreateActivity : AppCompatActivity() {
         response?.let {
             val alertDialog = AlertDialog.Builder(this).apply {
                 if (it.error == false) {
-                    setTitle("Success")
-                    setMessage("You have succesfully created new story")
-                    setPositiveButton("OK") { _, _ ->
+                    setTitle(getString(R.string.success))
+                    setMessage(getString(R.string.create_story_sucess))
+                    setPositiveButton(getString(R.string.ok)) { _, _ ->
                         finish()
                     }
                 } else if (it.error == true) {
-                    setTitle("Failed")
+                    setTitle(getString(R.string.failed))
                     setMessage(it.message)
-                    setPositiveButton("OK", null)
+                    setPositiveButton(getString(R.string.ok), null)
                 }
             }.create()
 
             alertDialog.setOnShowListener {
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
+                val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
+                val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
                 val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
                 val layoutParams = alertDialog.window?.attributes
                 layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
@@ -196,11 +213,7 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
+        binding.progressBar.isVisible = isLoading
     }
 
     private fun playAnimation() {

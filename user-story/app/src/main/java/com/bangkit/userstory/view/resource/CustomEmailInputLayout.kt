@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.bangkit.userstory.R
 import com.google.android.material.textfield.TextInputLayout
 
 class CustomEmailInputLayout @JvmOverloads constructor(
@@ -25,7 +26,7 @@ class CustomEmailInputLayout @JvmOverloads constructor(
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     if (s.isNotEmpty()) {
                         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
-                            setError("Invalid email address")
+                            setError(context.getString(R.string.error_email))
                         } else {
                             setError(null)
                         }

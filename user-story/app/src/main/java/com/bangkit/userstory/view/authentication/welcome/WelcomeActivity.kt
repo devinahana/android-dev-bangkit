@@ -48,12 +48,14 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.loginButton.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
+        binding.apply {
+            loginButton.setOnClickListener {
+                startActivity(Intent(this@WelcomeActivity, LoginActivity::class.java))
+            }
 
-        binding.signupButton.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
+            signupButton.setOnClickListener {
+                startActivity(Intent(this@WelcomeActivity, RegisterActivity::class.java))
+            }
         }
     }
 
