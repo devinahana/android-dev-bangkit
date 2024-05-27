@@ -3,11 +3,11 @@ package com.bangkit.userstory
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bangkit.userstory.data.UserRepository
+import com.bangkit.userstory.data.repository.UserRepository
 import com.bangkit.userstory.di.Injection
-import com.bangkit.userstory.view.authentication.login.LoginViewModel
-import com.bangkit.userstory.view.main.MainViewModel
-import com.bangkit.userstory.view.authentication.register.RegisterViewModel
+import com.bangkit.userstory.ui.authentication.login.LoginViewModel
+import com.bangkit.userstory.ui.main.MainViewModel
+import com.bangkit.userstory.ui.authentication.register.RegisterViewModel
 
 class ViewModelFactory(
     private val repository: UserRepository

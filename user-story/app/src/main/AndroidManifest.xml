@@ -18,22 +18,22 @@
         android:theme="@style/Theme.UserStory"
         tools:targetApi="31">
         <activity
-            android:name=".view.main.create.CreateActivity"
+            android:name=".ui.main.create.CreateActivity"
             android:exported="false" />
         <activity
-            android:name=".view.main.detail.DetailActivity"
+            android:name=".ui.main.detail.DetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.authentication.welcome.WelcomeActivity"
+            android:name=".ui.authentication.welcome.WelcomeActivity"
             android:exported="false" />
         <activity
-            android:name=".view.authentication.register.RegisterActivity"
+            android:name=".ui.authentication.register.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".view.authentication.login.LoginActivity"
+            android:name=".ui.authentication.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".view.main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

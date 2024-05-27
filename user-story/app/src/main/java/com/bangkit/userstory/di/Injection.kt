@@ -1,9 +1,9 @@
 package com.bangkit.userstory.di
 
 import android.content.Context
-import com.bangkit.userstory.data.UserRepository
-import com.bangkit.userstory.data.pref.UserPreference
-import com.bangkit.userstory.data.pref.dataStore
+import com.bangkit.userstory.data.repository.UserRepository
+import com.bangkit.userstory.data.local.pref.UserPreference
+import com.bangkit.userstory.data.local.pref.dataStore
 
 object Injection {
     fun provideRepository(context: Context): UserRepository {

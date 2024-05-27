@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.authentication.login.LoginActivity">
+    tools:context=".ui.authentication.login.LoginActivity">
 
     <TextView
         android:id="@+id/titleTextView"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/messageTextView"
         tools:alpha="100" />
 
-    <com.bangkit.userstory.view.resource.CustomEmailInputLayout
+    <com.bangkit.userstory.ui.resource.CustomEmailInputLayout
         android:id="@+id/emailEditTextLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -74,7 +74,7 @@
             android:ems="10"
             android:inputType="textEmailAddress"
             tools:ignore="SpeakableTextPresentCheck" />
-    </com.bangkit.userstory.view.resource.CustomEmailInputLayout>
+    </com.bangkit.userstory.ui.resource.CustomEmailInputLayout>
 
     <TextView
         android:id="@+id/passwordTextView"
@@ -89,7 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
         tools:alpha="100" />
 
-    <com.bangkit.userstory.view.resource.CustomPasswordInputLayout
+    <com.bangkit.userstory.ui.resource.CustomPasswordInputLayout
         android:id="@+id/passwordEditTextLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -111,7 +111,7 @@
             android:ems="10"
             android:inputType="textPassword" />
 
-    </com.bangkit.userstory.view.resource.CustomPasswordInputLayout>
+    </com.bangkit.userstory.ui.resource.CustomPasswordInputLayout>
 
     <Button
         android:id="@+id/loginButton"
