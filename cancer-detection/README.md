@@ -24,7 +24,10 @@ This is a **Cancer Detection Application** developed as part of my final project
 2. **Open *cancer-detection* folder** in Android Studio.
 
 3. **Configure the app**:
-    - You'll need to obtain a News API token and configure it in the build.gradle (Module :app) for the app to function properly.
+    You'll need to obtain a News API token and configure it in the local.properties for the app to function properly.
+    ```properties
+    API_TOKEN = <<YOUR_NEWS_API_TOKEN>>
+    ```
 
 4. **Run the app** on an emulator or physical device.
 
