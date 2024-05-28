@@ -1,4 +1,4 @@
-package com.dicoding.asclepius.view
+package com.dicoding.asclepius.ui.article
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.dicoding.asclepius.api.response.ArticlesItem
+import com.dicoding.asclepius.data.response.ArticlesItem
 import com.dicoding.asclepius.databinding.ItemArticleBinding
 
 class ListArticleAdapter<T> :

@@ -1,11 +1,11 @@
-package com.dicoding.asclepius.view
+package com.dicoding.asclepius.ui.article
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.asclepius.api.response.ArticlesItem
+import com.dicoding.asclepius.data.response.ArticlesItem
 import com.dicoding.asclepius.databinding.ActivityArticleBinding
 
 class ArticleActivity : AppCompatActivity() {

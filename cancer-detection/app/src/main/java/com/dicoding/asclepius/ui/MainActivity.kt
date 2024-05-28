@@ -1,4 +1,4 @@
-package com.dicoding.asclepius.view
+package com.dicoding.asclepius.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.dicoding.asclepius.R
 import com.dicoding.asclepius.databinding.ActivityMainBinding
 import com.dicoding.asclepius.helper.ImageClassifierHelper
+import com.dicoding.asclepius.ui.article.ArticleActivity
+import com.dicoding.asclepius.ui.result.ResultActivity
 import org.tensorflow.lite.task.vision.classifier.Classifications
 
 class MainActivity : AppCompatActivity() {

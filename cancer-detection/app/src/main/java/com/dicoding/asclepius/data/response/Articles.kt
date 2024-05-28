@@ -1,4 +1,4 @@
-package com.dicoding.asclepius.api.response
+package com.dicoding.asclepius.data.response
 
 import com.google.gson.annotations.SerializedName
 

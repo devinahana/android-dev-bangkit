@@ -1,12 +1,12 @@
-package com.dicoding.asclepius.view
+package com.dicoding.asclepius.ui.article
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dicoding.asclepius.api.response.Articles
-import com.dicoding.asclepius.api.response.ArticlesItem
-import com.dicoding.asclepius.api.retrofit.ApiConfig
+import com.dicoding.asclepius.data.response.Articles
+import com.dicoding.asclepius.data.response.ArticlesItem
+import com.dicoding.asclepius.data.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,3 +1,7 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
+val apiToken: String = gradleLocalProperties(rootDir).getProperty("API_TOKEN")
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -26,12 +30,12 @@ android {
             )
 
             buildConfigField("String", "API_URL", "\"https://newsapi.org/v2/\"")
-            buildConfigField("String", "TOKEN", "\"f2319e110c0b4ae6983127d8e15ec94b\"")
+            buildConfigField("String", "TOKEN", "\"$apiToken\"")
         }
 
         debug {
             buildConfigField("String", "API_URL", "\"https://newsapi.org/v2/\"")
-            buildConfigField("String", "TOKEN", "\"f2319e110c0b4ae6983127d8e15ec94b\"")
+            buildConfigField("String", "TOKEN", "\"$apiToken\"")
         }
     }
     compileOptions {

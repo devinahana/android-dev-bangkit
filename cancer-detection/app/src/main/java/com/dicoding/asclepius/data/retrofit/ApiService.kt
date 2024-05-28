@@ -1,6 +1,6 @@
-package com.dicoding.asclepius.api.retrofit
+package com.dicoding.asclepius.data.retrofit
 
-import com.dicoding.asclepius.api.response.Articles
+import com.dicoding.asclepius.data.response.Articles
 import com.dicoding.asclepius.BuildConfig
 import retrofit2.Call
 import retrofit2.http.*
