@@ -1,4 +1,4 @@
-package com.example.userapplication.ui
+package com.example.userapplication.ui.detail
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.userapplication.data.response.UserResponse
+import com.example.userapplication.data.remote.response.UserResponse
 import com.example.userapplication.databinding.FragmentFollowersFollowingBinding
+import com.example.userapplication.views.ListUserAdapter
+import com.example.userapplication.utils.ViewModelFactory
 
 class FollowersFollowingFragment : Fragment() {
 

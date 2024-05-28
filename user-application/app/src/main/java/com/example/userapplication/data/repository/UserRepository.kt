@@ -1,7 +1,10 @@
-package com.example.userapplication.data.database
+package com.example.userapplication.data.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import com.example.userapplication.data.local.entity.User
+import com.example.userapplication.data.local.room.UserDao
+import com.example.userapplication.data.local.room.UserRoomDatabase
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 

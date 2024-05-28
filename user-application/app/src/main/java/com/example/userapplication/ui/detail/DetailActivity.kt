@@ -1,4 +1,4 @@
-package com.example.userapplication.ui
+package com.example.userapplication.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
@@ -16,9 +16,15 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.mydatastore.SettingPreferences
 import com.example.mydatastore.dataStore
 import com.example.userapplication.R
-import com.example.userapplication.data.database.User
-import com.example.userapplication.data.response.UserResponse
+import com.example.userapplication.data.local.entity.User
+import com.example.userapplication.data.remote.response.UserResponse
 import com.example.userapplication.databinding.ActivityDetailBinding
+import com.example.userapplication.ui.favorite.FavoriteActivity
+import com.example.userapplication.ui.ModeViewModel
+import com.example.userapplication.views.SectionsPagerAdapter
+import com.example.userapplication.ui.UserViewModel
+import com.example.userapplication.utils.UserViewModelFactory
+import com.example.userapplication.utils.ViewModelFactory
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 

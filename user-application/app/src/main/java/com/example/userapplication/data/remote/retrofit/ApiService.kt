@@ -1,6 +1,7 @@
-package com.example.userapplication.data.retrofit
+package com.example.userapplication.data.remote.retrofit
 
-import com.example.userapplication.data.response.*
+import com.example.userapplication.data.remote.response.SearchResponse
+import com.example.userapplication.data.remote.response.UserResponse
 import retrofit2.Call
 import retrofit2.http.*
 

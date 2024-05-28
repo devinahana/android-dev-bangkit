@@ -1,9 +1,13 @@
-package com.example.userapplication.ui
+package com.example.userapplication.utils
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mydatastore.SettingPreferences
+import com.example.userapplication.ui.ModeViewModel
+import com.example.userapplication.ui.UserViewModel
+import com.example.userapplication.ui.detail.DetailViewModel
+import com.example.userapplication.ui.detail.FollowersFollowingViewModel
 
 class ViewModelFactory(
     private val username: String? = null,

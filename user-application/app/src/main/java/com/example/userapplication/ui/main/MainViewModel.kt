@@ -1,12 +1,12 @@
-package com.example.userapplication.ui
+package com.example.userapplication.ui.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.userapplication.data.response.SearchResponse
-import com.example.userapplication.data.response.UserResponse
-import com.example.userapplication.data.retrofit.ApiConfig
+import com.example.userapplication.data.remote.response.SearchResponse
+import com.example.userapplication.data.remote.response.UserResponse
+import com.example.userapplication.data.remote.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

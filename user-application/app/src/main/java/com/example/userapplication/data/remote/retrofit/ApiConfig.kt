@@ -1,4 +1,4 @@
-package com.example.userapplication.data.retrofit
+package com.example.userapplication.data.remote.retrofit
 
 import com.example.userapplication.BuildConfig
 import okhttp3.OkHttpClient

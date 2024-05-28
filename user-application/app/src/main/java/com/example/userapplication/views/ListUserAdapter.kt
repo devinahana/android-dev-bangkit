@@ -1,4 +1,4 @@
-package com.example.userapplication.ui
+package com.example.userapplication.views
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
-import com.example.userapplication.data.database.User
-import com.example.userapplication.data.response.UserResponse
+import com.example.userapplication.data.local.entity.User
+import com.example.userapplication.data.remote.response.UserResponse
 import com.example.userapplication.databinding.ItemUserBinding
+import com.example.userapplication.ui.detail.DetailActivity
 
 class ListUserAdapter<T> :
     ListAdapter<T, ListUserAdapter.MyViewHolder<T>>(DIFF_CALLBACK as DiffUtil.ItemCallback<T>) {

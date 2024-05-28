@@ -1,4 +1,4 @@
-package com.example.userapplication.data.database
+package com.example.userapplication.data.local.entity
 
 import android.os.Parcelable
 import androidx.room.Entity

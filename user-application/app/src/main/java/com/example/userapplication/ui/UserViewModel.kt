@@ -3,8 +3,8 @@ package com.example.userapplication.ui
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.userapplication.data.database.User
-import com.example.userapplication.data.database.UserRepository
+import com.example.userapplication.data.local.entity.User
+import com.example.userapplication.data.repository.UserRepository
 
 class UserViewModel(application: Application) : ViewModel() {
     private val mUserRepository: UserRepository = UserRepository(application)
