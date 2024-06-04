@@ -1,5 +1,7 @@
 package com.bangkit.userstory.data.remote.response
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class GetAllStoriesResponse(
@@ -27,7 +29,11 @@ data class GetDetailStoryReponse(
 	val story: Story? = null
 )
 
+@Entity(tableName = "story")
 data class Story(
+	@PrimaryKey
+	@field:SerializedName("id")
+	val id: String,
 
 	@field:SerializedName("photoUrl")
 	val photoUrl: String? = null,
@@ -42,12 +48,10 @@ data class Story(
 	val description: String? = null,
 
 	@field:SerializedName("lon")
-	val lon: Any? = null,
+	val lon: Double? = null,
 
-	@field:SerializedName("id")
-	val id: String? = null,
 
 	@field:SerializedName("lat")
-	val lat: Any? = null
+	val lat: Double? = null
 )
 

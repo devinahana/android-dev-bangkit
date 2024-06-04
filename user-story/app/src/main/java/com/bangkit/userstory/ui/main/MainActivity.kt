@@ -1,7 +1,6 @@
 package com.bangkit.userstory.ui.main
 
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -17,26 +16,27 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.userstory.R
 import com.bangkit.userstory.ViewModelFactory
-import com.bangkit.userstory.data.remote.response.Story
 import com.bangkit.userstory.databinding.ActivityMainBinding
 import com.bangkit.userstory.ui.authentication.welcome.WelcomeActivity
 import com.bangkit.userstory.ui.main.create.CreateActivity
+import com.bangkit.userstory.ui.main.maps.MapsActivity
 import com.bangkit.userstory.ui.resource.ListStoryAdapter
+import com.bangkit.userstory.ui.resource.LoadingStateAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
+    private lateinit var adapter: ListStoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupView()
-
-        val layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.layoutManager = layoutManager
+        setupAdapter()
 
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
@@ -45,26 +45,10 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             } else {
-                viewModel.getAllStories(user.token)
-            }
-        }
-
-        viewModel.listStory.observe(this) {response ->
-            if (response.listStory != null) {
-                if (response.listStory.isEmpty()) {
-                    binding.errorTextView.text = R.string.no_data.toString()
-                    binding.errorTextView.setTextColor(ContextCompat.getColor(this, R.color.black))
-                    binding.errorTextView.isVisible = true
-                    binding.recyclerView.isVisible = false
-                } else {
-                    binding.errorTextView.isVisible = false
+                viewModel.getPagingStories(user.token).observe(this) { pagingData ->
                     binding.recyclerView.isVisible = true
-                    setListStoryData(response.listStory)
+                    adapter.submitData(lifecycle, pagingData)
                 }
-            } else {
-                binding.errorTextView.text = response.message
-                binding.errorTextView.isVisible = true
-                binding.recyclerView.isVisible = false
             }
         }
 
@@ -77,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -91,33 +76,24 @@ class MainActivity : AppCompatActivity() {
             R.id.change_language -> {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
             }
+            R.id.maps -> {
+                val intent = Intent(this, MapsActivity::class.java)
+                startActivity(intent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun showLogoutConfirmationDialog() {
-        val alertDialog = AlertDialog.Builder(this).apply {
-            setTitle(getString(R.string.logout))
-            setMessage(getString(R.string.logout_confirmation))
-            setPositiveButton(getString(R.string.yes)) { _, _ ->
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.logout))
+            .setMessage(getString(R.string.logout_confirmation))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.logout()
             }
-            setNegativeButton(getString(R.string.no), null)
-        }.create()
-
-        alertDialog.setOnShowListener {
-            alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
-            val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-            val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-            val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-            val layoutParams = alertDialog.window?.attributes
-            layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
-            alertDialog.window?.attributes = layoutParams
-        }
-
-        alertDialog.show()
+            .setNegativeButton(getString(R.string.no), null)
+            .show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
     }
 
 
@@ -133,10 +109,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setListStoryData(stories: List<Story>) {
-        val adapter = ListStoryAdapter<Story>()
-        adapter.submitList(stories)
-        binding.recyclerView.adapter = adapter
+    private fun setupAdapter() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+
+        adapter = ListStoryAdapter()
+        binding.recyclerView.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
     }
 
 

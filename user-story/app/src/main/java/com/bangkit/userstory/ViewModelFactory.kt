@@ -3,6 +3,7 @@ package com.bangkit.userstory
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.bangkit.userstory.data.repository.StoryPagingRepository
 import com.bangkit.userstory.data.repository.UserRepository
 import com.bangkit.userstory.di.Injection
 import com.bangkit.userstory.ui.authentication.login.LoginViewModel
@@ -10,14 +11,15 @@ import com.bangkit.userstory.ui.main.MainViewModel
 import com.bangkit.userstory.ui.authentication.register.RegisterViewModel
 
 class ViewModelFactory(
-    private val repository: UserRepository
+    private val repository: UserRepository,
+    private val storyRepository: StoryPagingRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
-                MainViewModel(repository) as T
+                MainViewModel(repository, storyRepository) as T
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(repository) as T
@@ -36,7 +38,10 @@ class ViewModelFactory(
         fun getInstance(context: Context): ViewModelFactory {
             if (INSTANCE == null) {
                 synchronized(ViewModelFactory::class.java) {
-                    INSTANCE = ViewModelFactory(Injection.provideRepository(context))
+                    INSTANCE = ViewModelFactory(
+                        Injection.provideRepository(context),
+                        Injection.provideStoryRepository(context)
+                    )
                 }
             }
             return INSTANCE as ViewModelFactory

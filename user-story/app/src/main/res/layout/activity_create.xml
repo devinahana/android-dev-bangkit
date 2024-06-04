@@ -110,10 +110,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:minLines="2"
             android:inputType="textMultiLine"
             android:gravity="top|start"
             tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/checkboxLocation"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/include_location"
+        android:alpha="0"
+        tools:alpha="100"
+        app:layout_constraintTop_toBottomOf="@+id/descEditTextLayout"/>
 
     <Button
         android:id="@+id/submitButton"
@@ -123,12 +135,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginTop="16dp"
         android:text="@string/submit"
         android:backgroundTint="@color/navy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descEditTextLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/checkboxLocation" />
 
     <ProgressBar
         android:id="@+id/progressBar"

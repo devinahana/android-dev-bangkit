@@ -2,6 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="blue">#7DB3F9</color>
     <color name="navy">#2D3D4F</color>
+    <color name="gray">#B9B9B9</color>
     <color name="red">@android:color/holo_red_dark</color>
+    <color name="green">@android:color/holo_green_dark</color>
 </resources>

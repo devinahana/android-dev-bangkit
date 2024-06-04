@@ -1,7 +1,6 @@
 package com.bangkit.userstory.ui.main.detail
 
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -20,7 +19,9 @@ import com.bangkit.userstory.databinding.ActivityDetailBinding
 import com.bangkit.userstory.utils.formatDateTime
 import com.bangkit.userstory.ui.main.MainViewModel
 import com.bangkit.userstory.ui.authentication.welcome.WelcomeActivity
+import com.bangkit.userstory.ui.main.maps.MapsActivity
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -86,33 +87,24 @@ class DetailActivity : AppCompatActivity() {
             R.id.change_language -> {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
             }
+            R.id.maps -> {
+                val intent = Intent(this, MapsActivity::class.java)
+                startActivity(intent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun showLogoutConfirmationDialog() {
-        val alertDialog = AlertDialog.Builder(this).apply {
-            setTitle(getString(R.string.logout))
-            setMessage(getString(R.string.logout_confirmation))
-            setPositiveButton(getString(R.string.yes)) { _, _ ->
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.logout))
+            .setMessage(getString(R.string.logout_confirmation))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.logout()
             }
-            setNegativeButton(getString(R.string.no), null)
-        }.create()
-
-        alertDialog.setOnShowListener {
-            alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
-            val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-            val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-            val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-            val layoutParams = alertDialog.window?.attributes
-            layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
-            alertDialog.window?.attributes = layoutParams
-        }
-
-        alertDialog.show()
+            .setNegativeButton(getString(R.string.no), null)
+            .show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
     }
 
     private fun showLoading(isLoading: Boolean) {

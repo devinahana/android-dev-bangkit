@@ -2,13 +2,16 @@ package com.bangkit.userstory.ui.authentication.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +23,7 @@ import com.bangkit.userstory.data.remote.request.LoginRequest
 import com.bangkit.userstory.data.remote.response.LoginResponse
 import com.bangkit.userstory.databinding.ActivityLoginBinding
 import com.bangkit.userstory.ui.main.MainActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
@@ -36,56 +40,57 @@ class LoginActivity : AppCompatActivity() {
         playAnimation()
 
         binding.loginButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-            val password = binding.passwordEditText.text.toString()
-            val request = LoginRequest(email, password)
+            hideKeyboard()
+            if (binding.emailEditTextLayout.error == null && binding.passwordEditTextLayout.error == null) {
+                val email = binding.emailEditText.text.toString()
+                val password = binding.passwordEditText.text.toString()
+                val request = LoginRequest(email, password)
 
-            viewModel.loginUser(request)
+                viewModel.loginUser(request)
 
-            viewModel.user.observe(this) { response ->
-                if (response.error != null) {
-                    handleResponse(response)
+                viewModel.user.observe(this) { response ->
+                    if (response.error != null) {
+                        handleResponse(response)
+                    }
+                }
+
+                viewModel.isLoading.observe(this) { isLoading ->
+                    showLoading(isLoading)
                 }
             }
+        }
 
-            viewModel.isLoading.observe(this) { isLoading ->
-                showLoading(isLoading)
+        binding.passwordEditText.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                binding.loginButton.performClick()
+                true
+            } else {
+                false
             }
         }
     }
 
     private fun handleResponse(response: LoginResponse?) {
         response?.let {
-            val alertDialog = AlertDialog.Builder(this).apply {
-                if (it.error == false) {
-                    setTitle(getString(R.string.success))
-                    setMessage(getString(R.string.login_success))
-                    setPositiveButton(getString(R.string.continue_)) { _, _ ->
-                        val intent = Intent(context, MainActivity::class.java)
+            if (it.error == false) {
+                val dialog = MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.success))
+                    .setMessage(getString(R.string.login_success))
+                    .setPositiveButton(getString(R.string.continue_)) { _, _ ->
+                        val intent = Intent(this, MainActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         finish()
                     }
-                } else if (it.error == true) {
-                    setTitle(getString(R.string.failed))
-                    setMessage(it.message)
-                    setPositiveButton(getString(R.string.ok), null)
-                }
-            }.create()
-
-            alertDialog.setOnShowListener {
-                alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
-                val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-                val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-                val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-                val layoutParams = alertDialog.window?.attributes
-                layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
-                alertDialog.window?.attributes = layoutParams
+                    .show()
+            } else if (it.error == true) {
+                val dialog = MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.failed))
+                    .setMessage(it.message)
+                    .setPositiveButton(getString(R.string.ok), null)
+                    .show()
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
             }
-
-            alertDialog.show()
         }
         viewModel.clearResponse()
     }
@@ -136,6 +141,14 @@ class LoginActivity : AppCompatActivity() {
                 togetherPassword,
                 login)
             start()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocusedView = this.currentFocus
+        if (currentFocusedView != null) {
+            inputMethodManager.hideSoftInputFromWindow(currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         }
     }
 

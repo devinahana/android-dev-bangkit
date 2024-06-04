@@ -6,15 +6,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.bangkit.userstory.data.repository.UserRepository
 import com.bangkit.userstory.data.local.entity.UserModel
 import com.bangkit.userstory.data.remote.response.GeneralResponse
 import com.bangkit.userstory.data.remote.response.GetAllStoriesResponse
 import com.bangkit.userstory.data.remote.response.GetDetailStoryReponse
+import com.bangkit.userstory.data.remote.response.Story
 import com.bangkit.userstory.data.remote.retrofit.ApiConfig
+import com.bangkit.userstory.data.repository.StoryPagingRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -23,7 +28,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
-class MainViewModel(private val repository: UserRepository) : ViewModel() {
+class MainViewModel(
+    private val repository: UserRepository,
+    private val storyRepository: StoryPagingRepository
+) : ViewModel() {
     private val _listStory = MutableLiveData<GetAllStoriesResponse>()
     val listStory: LiveData<GetAllStoriesResponse> = _listStory
 
@@ -36,9 +44,15 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun getAllStories(token: String) {
+    fun getPagingStories(token: String): LiveData<PagingData<Story>> {
+        val data: LiveData<PagingData<Story>> = storyRepository.getStories(token).cachedIn(viewModelScope)
+        _isLoading.value = false
+        return data
+    }
+
+    fun getAllStories(token: String, location: Int? = null) {
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getAllStories("Bearer " + token)
+        val client = ApiConfig.getApiService().getAllStoriesNoSuspend(token = "Bearer $token", location = location)
         client.enqueue(object : Callback<GetAllStoriesResponse> {
 
             override fun onResponse(call: Call<GetAllStoriesResponse>, response: Response<GetAllStoriesResponse>) {
@@ -98,17 +112,21 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
         })
     }
 
-    fun createStory(token: String, imageFile: File, description: String) {
+    fun createStory(token: String, imageFile: File, description: String, lat: Double? = null, lon: Double? = null) {
         _isLoading.value = true
-        val requestBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/*".toMediaType())
         val multipartBody = MultipartBody.Part.createFormData(
             "photo",
             imageFile.name,
             requestImageFile
         )
-
-        val client = ApiConfig.getApiService().createStoryAuthenticated("Bearer " + token, multipartBody, requestBody)
+        val client = ApiConfig.getApiService().createStoryAuthenticated(
+            "Bearer " + token,
+            multipartBody,
+            description.toRequestBody("text/plain".toMediaType()),
+            lat?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull()),
+            lon?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        )
         client.enqueue(object : Callback<GeneralResponse> {
 
             override fun onResponse(call: Call<GeneralResponse>, response: Response<GeneralResponse>) {

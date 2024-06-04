@@ -13,7 +13,7 @@
     <string name="password">Kata sandi</string>
     <string name="success">Berhasil</string>
     <string name="failed">Gagal</string>
-    <string name="create_story_sucess">Anda berhasil membentuk cerita baru</string>
+    <string name="create_story_success">Anda berhasil membentuk cerita baru</string>
     <string name="register_success">Akun Anda berhasil dibentuk. Silahkan masuk untuk melanjutkan</string>
     <string name="login_success">Anda telah berhasil masuk!</string>
     <string name="continue_">Lanjut</string>
@@ -33,4 +33,7 @@
     <string name="error_message">Telah terjadi kesalahan</string>
     <string name="error_email">Alamat email tidak valid</string>
     <string name="error_password_less_8">Kata sandi minimal 8 karakter</string>
+    <string name="maps">Peta</string>
+    <string name="include_location">Tambahkan lokasi Anda saat ini</string>
+    <string name="retry">Coba lagi</string>
 </resources>

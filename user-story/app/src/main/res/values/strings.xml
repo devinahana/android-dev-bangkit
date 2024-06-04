@@ -13,8 +13,8 @@
     <string name="password">Password</string>
     <string name="success">Success</string>
     <string name="failed">Failed</string>
-    <string name="create_story_sucess">You have successfully created new story</string>
-    <string name="register_success">Your account is succesfully created. Please login to continue</string>
+    <string name="create_story_success">You have successfully created new story</string>
+    <string name="register_success">Your account is successfully created. Please login to continue</string>
     <string name="login_success">You are successfully logged in!</string>
     <string name="continue_">Continue</string>
     <string name="ok">OK</string>
@@ -33,4 +33,7 @@
     <string name="error_message">An error occurred</string>
     <string name="error_email">Invalid email address</string>
     <string name="error_password_less_8">Password must be at least 8 characters</string>
+    <string name="maps">Maps</string>
+    <string name="include_location">Include your current location</string>
+    <string name="retry">Try again</string>
 </resources>

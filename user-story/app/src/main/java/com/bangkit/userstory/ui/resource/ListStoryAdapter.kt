@@ -4,26 +4,26 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.userstory.data.remote.response.Story
 import com.bangkit.userstory.databinding.ItemStoryBinding
 import com.bangkit.userstory.ui.main.detail.DetailActivity
 import com.bumptech.glide.Glide
 
-class ListStoryAdapter<T> :
-    ListAdapter<T, ListStoryAdapter.MyViewHolder<T>>(DIFF_CALLBACK as DiffUtil.ItemCallback<T>) {
+class ListStoryAdapter :
+    PagingDataAdapter<Story, ListStoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder<T> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding =
             ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder<T>, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        item?.let { holder.bind(it) }
 
         holder.itemView.setOnClickListener {
             if (item is Story) {
@@ -34,27 +34,25 @@ class ListStoryAdapter<T> :
         }
     }
 
-    class MyViewHolder<T>(val binding: ItemStoryBinding) :
+    class MyViewHolder(val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: T) {
-            if (item is Story) {
-                binding.tvStoryOwner.text = item.name
-                Glide.with(binding.root)
-                    .load(item.photoUrl)
-                    .into(binding.imgStoryPhoto)
-            }
+        fun bind(item: Story) {
+            binding.tvStoryOwner.text = item.name
+            Glide.with(binding.root)
+                .load(item.photoUrl)
+                .into(binding.imgStoryPhoto)
         }
     }
 
     companion object {
-        private val DIFF_CALLBACK: DiffUtil.ItemCallback<Any> = object : DiffUtil.ItemCallback<Any>() {
-            override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Story>() {
+            override fun areItemsTheSame(oldItem: Story, newItem: Story): Boolean {
                 return oldItem == newItem
             }
 
             @SuppressLint("DiffUtilEquals")
-            override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-                return oldItem == newItem
+            override fun areContentsTheSame(oldItem: Story, newItem: Story): Boolean {
+                return oldItem.id == newItem.id
             }
         }
     }

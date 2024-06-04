@@ -3,7 +3,8 @@ package com.bangkit.userstory.ui.main.create
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.content.res.Resources
+import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -30,6 +31,10 @@ import com.bangkit.userstory.utils.reduceFileImage
 import com.bangkit.userstory.utils.uriToFile
 import com.bangkit.userstory.ui.authentication.welcome.WelcomeActivity
 import com.bangkit.userstory.ui.main.MainViewModel
+import com.bangkit.userstory.ui.main.maps.MapsActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class CreateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateBinding
@@ -38,6 +43,7 @@ class CreateActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
     private lateinit var token: String;
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +63,8 @@ class CreateActivity : AppCompatActivity() {
             }
         }
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         binding.apply {
             galleryButton.setOnClickListener { startGallery() }
             cameraButton.setOnClickListener { startCamera() }
@@ -65,7 +73,13 @@ class CreateActivity : AppCompatActivity() {
                 if (uri != null) {
                     val imageFile = uriToFile(uri, this@CreateActivity).reduceFileImage()
                     val description = binding.descEditText.text.toString()
-                    viewModel.createStory(token, imageFile, description)
+                    if (binding.checkboxLocation.isChecked) {
+                        getMyLocation { location ->
+                            viewModel.createStory(token, imageFile, description, location.latitude, location.longitude)
+                        }
+                    } else {
+                        viewModel.createStory(token, imageFile, description)
+                    }
                 } else {
                     handleResponse(
                         GeneralResponse(
@@ -86,8 +100,32 @@ class CreateActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        )
+        { isGranted: Boolean ->
+            if (isGranted) {
+                getMyLocation{}
+            }
+        }
 
+    private fun getMyLocation(callback: (Location) -> Unit) {
+        if (ContextCompat.checkSelfPermission(
+                this.applicationContext,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    callback(it)
+                }
+            }
+        } else {
+            requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -103,33 +141,24 @@ class CreateActivity : AppCompatActivity() {
             R.id.change_language -> {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
             }
+            R.id.maps -> {
+                val intent = Intent(this, MapsActivity::class.java)
+                startActivity(intent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun showLogoutConfirmationDialog() {
-        val alertDialog = AlertDialog.Builder(this).apply {
-            setTitle(getString(R.string.logout))
-            setMessage(getString(R.string.logout_confirmation))
-            setPositiveButton(getString(R.string.yes)) { _, _ ->
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.logout))
+            .setMessage(getString(R.string.logout_confirmation))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.logout()
             }
-            setNegativeButton(getString(R.string.no), null)
-        }.create()
-
-        alertDialog.setOnShowListener {
-            alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
-            val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-            val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-            val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-            val layoutParams = alertDialog.window?.attributes
-            layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
-            alertDialog.window?.attributes = layoutParams
-        }
-
-        alertDialog.show()
+            .setNegativeButton(getString(R.string.no), null)
+            .show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
     }
 
 
@@ -180,33 +209,22 @@ class CreateActivity : AppCompatActivity() {
 
     private fun handleResponse(response: GeneralResponse?) {
         response?.let {
-            val alertDialog = AlertDialog.Builder(this).apply {
-                if (it.error == false) {
-                    setTitle(getString(R.string.success))
-                    setMessage(getString(R.string.create_story_sucess))
-                    setPositiveButton(getString(R.string.ok)) { _, _ ->
+            if (it.error == false) {
+                val dialog = MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.success))
+                    .setMessage(getString(R.string.create_story_success))
+                    .setPositiveButton(getString(R.string.ok)) { _, _ ->
                         finish()
                     }
-                } else if (it.error == true) {
-                    setTitle(getString(R.string.failed))
-                    setMessage(it.message)
-                    setPositiveButton(getString(R.string.ok), null)
-                }
-            }.create()
-
-            alertDialog.setOnShowListener {
-                alertDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
-                val positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                positiveButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-                val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                negativeButton.setTextColor(ContextCompat.getColor(this, R.color.navy))
-                val dialogMargin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-                val layoutParams = alertDialog.window?.attributes
-                layoutParams?.width = Resources.getSystem().displayMetrics.widthPixels - 2 * dialogMargin
-                alertDialog.window?.attributes = layoutParams
+                    .show()
+            } else if (it.error == true) {
+                val dialog = MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.failed))
+                    .setMessage(it.message)
+                    .setPositiveButton(getString(R.string.ok), null)
+                    .show()
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
             }
-
-            alertDialog.show()
 
         }
         viewModel.clearResponse()
@@ -224,6 +242,7 @@ class CreateActivity : AppCompatActivity() {
         val descTextView = ObjectAnimator.ofFloat(binding.descTextView, View.ALPHA, 1f).setDuration(500)
         val descEditTextLayout = ObjectAnimator.ofFloat(binding.descEditTextLayout, View.ALPHA, 1f).setDuration(500)
         val submitButton = ObjectAnimator.ofFloat(binding.submitButton, View.ALPHA, 1f).setDuration(500)
+        val checkboxLocation = ObjectAnimator.ofFloat(binding.checkboxLocation, View.ALPHA, 1f).setDuration(500)
 
         val togetherButton = AnimatorSet().apply {
             playTogether(galleryButton, cameraButton)
@@ -239,6 +258,7 @@ class CreateActivity : AppCompatActivity() {
                 preview,
                 togetherButton,
                 togetherDescription,
+                checkboxLocation,
                 submitButton
             )
             start()
