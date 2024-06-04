@@ -5,6 +5,7 @@
         <item name="android:actionBarStyle">@style/CustomActionBarStyle</item>
         <item name="actionBarStyle">@style/CustomActionBarStyle</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+        <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
     </style>
 
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.Material3.SmallComponent">
@@ -12,6 +13,10 @@
     </style>
     <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
         <item name="cornerSize">@dimen/dialog_corner_radius</item>
+    </style>
+
+    <style name="Widget.App.CheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/navy</item>
     </style>
 
     <style name="CustomActionBarStyle" parent="Widget.AppCompat.ActionBar.Solid">
