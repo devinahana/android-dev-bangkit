@@ -19,6 +19,7 @@
 - **Google Maps API**: An API provided by Google to integrate and display interactive maps in the app.
 - **Paging 3**: A library from Android that simplifies data pagination, optimizing resource usage and performance.
 - **Remote Mediator**: Component of the Paging 3 library that manages the interaction between local data storage and remote data sources.
+- **JUnit 4, Mockito**: A widely used framework for unit testing in Java/Kotlin, integrates seamlessly with Mockito to create mock objects and simulate dependencies.
 
 
 ## Getting Started
